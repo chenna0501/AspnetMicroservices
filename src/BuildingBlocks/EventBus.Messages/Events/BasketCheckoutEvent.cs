@@ -1,7 +1,12 @@
-﻿using System.Collections.Generic;
-namespace Basket.API.Entities
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace EventBus.Messages.Events
 {
-    public class BasketCheckout
+    public class BasketCheckoutEvent: IntegrationBaseEvent
     {
         public string UserName { get; set; }
         public decimal TotalPrice { get; set; }
@@ -21,6 +26,5 @@ namespace Basket.API.Entities
         public string Expiration { get; set; }
         public string CVV { get; set; }
         public int PaymentMethod { get; set; }
-
     }
 }
