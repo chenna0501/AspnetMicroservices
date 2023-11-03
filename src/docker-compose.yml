@@ -59,6 +59,12 @@ services:
       context: .
       dockerfile: ApiGateways/OcelotApiGw/Dockerfile
 
+  shopping.aggregator:
+    image: ${DOCKER_REGISTRY-}shoppingaggregator
+    build:
+      context: .
+      dockerfile: ApiGateways/Shopping.Aggregator/Dockerfile
+
 volumes:
   mongo_data:
   portainer_data:
@@ -66,6 +72,7 @@ volumes:
   pgadmin_data:
   kyc-saga-sqldb:
   rabbit-mq:
+
 
 
 
