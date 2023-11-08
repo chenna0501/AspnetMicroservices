@@ -65,6 +65,12 @@ services:
       context: .
       dockerfile: ApiGateways/Shopping.Aggregator/Dockerfile
 
+  aspnetrunbasics:
+    image: ${DOCKER_REGISTRY-}aspnetrunbasics
+    build:
+      context: .
+      dockerfile: WebApps/AspnetRunBasics/Dockerfile
+
 volumes:
   mongo_data:
   portainer_data:
@@ -72,6 +78,7 @@ volumes:
   pgadmin_data:
   kyc-saga-sqldb:
   rabbit-mq:
+
 
 
 
