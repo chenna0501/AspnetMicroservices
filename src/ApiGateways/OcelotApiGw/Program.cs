@@ -2,6 +2,8 @@ using Ocelot.Middleware;
 using Ocelot.DependencyInjection;
 using Ocelot.Values;
 using Ocelot.Cache.CacheManager;
+using Common.Logging;
+
 
 namespace OcelotApiGw
 {
@@ -10,6 +12,9 @@ namespace OcelotApiGw
     {
         public static void Main(string[] args)
         {
+            var builder = WebApplication.CreateBuilder(args);
+            // Configure logging with Serilog
+            //builder.Services.AddSeriLogger(builder.Configuration);
             new WebHostBuilder()
             .UseKestrel()
             .UseContentRoot(Directory.GetCurrentDirectory())
@@ -25,14 +30,15 @@ namespace OcelotApiGw
             .ConfigureServices(s => {
                 s.AddOcelot()
         .AddCacheManager(x => x.WithDictionaryHandle());
+                s.AddSeriLogger(builder.Configuration);
             })
-            .ConfigureLogging((hostingContext, loggingbuilder) =>
-            {
-                //add your logging
-                loggingbuilder.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
-                loggingbuilder.AddConsole();
-                loggingbuilder.AddDebug();
-            })
+            //.ConfigureLogging((hostingContext, loggingbuilder) =>
+            //{
+            //    //add your logging
+            //    loggingbuilder.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
+            //    loggingbuilder.AddConsole();
+            //    loggingbuilder.AddDebug();
+            //})
             .UseIISIntegration()
             .Configure(app =>
             {

@@ -8,6 +8,7 @@ using Microsoft.OpenApi.Models;
 using MassTransit;
 using EventBus.Messages.Common;
 using Ordering.API.EventBusConsumer;
+using Common.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 ConfigurationManager configuration = builder.Configuration;
@@ -40,6 +41,10 @@ builder.Services.AddMassTransit(config =>
 // Add services to the container.
 builder.Services.AddScoped<BasketCheckoutConsumer>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+// Configure logging with Serilog
+builder.Services.AddSeriLogger(builder.Configuration);
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

@@ -5,6 +5,7 @@ using Basket.API.Repositories;
 using Discount.Grpc.Protos;
 using MassTransit;
 using Microsoft.OpenApi.Models;
+using Common.Logging;
 //using MassTransit.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -36,22 +37,9 @@ builder.Services.AddMassTransit(config =>
     });
 
 });
-//builder.Services.AddMassTransitHostedService();
 
-//builder.Services.
-//builder.Services.AddMassTransit(config =>
-//{
-//    config.UsingRabbitMq((ctx, cfg) =>
-//    {
-//        cfg.Host(new Uri("amqp://localhost"), h =>
-//        {
-//            h.Username("guest");
-//            h.Password("guest");
-//        });
-//    });
-//});
-//builder.Services.AddMassTransitHostedService();
-
+// Configure logging with Serilog
+builder.Services.AddSeriLogger(builder.Configuration);
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

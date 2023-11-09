@@ -1,20 +1,27 @@
+using Common.Logging;
 using Shopping.Aggregator.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+
+//Registering the Delegate Handler.
+builder.Services.AddTransient<LoggingDelegatingHandler>();
 
 //Add http client services at ConfigureServices(IServiceCollection services)
 builder.Services.AddHttpClient<ICatalogService, CatalogService>(c =>
 {
     c.BaseAddress = new Uri(builder.Configuration["ApiSettings:CatalogUrl"]);
-});
+}).AddHttpMessageHandler<LoggingDelegatingHandler>();
 builder.Services.AddHttpClient<IBasketService, BasketService>(c =>
 {
     c.BaseAddress = new Uri(builder.Configuration["ApiSettings:BasketUrl"]);
-});
+}).AddHttpMessageHandler<LoggingDelegatingHandler>();
 builder.Services.AddHttpClient<IOrderService, OrderService>(c =>
 {
     c.BaseAddress = new Uri(builder.Configuration["ApiSettings:OrderingUrl"]);
-});
+}).AddHttpMessageHandler<LoggingDelegatingHandler>();
+
+// Configure logging with Serilog
+builder.Services.AddSeriLogger(builder.Configuration);
 
 // Add services to the container.
 

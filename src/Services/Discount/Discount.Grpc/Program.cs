@@ -1,6 +1,7 @@
 using Discount.Grpc.Repositories;
 using Discount.Grpc.Services;
 using Microsoft.Extensions.DependencyInjection;
+using Common.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +10,8 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 // Additional configuration is required to successfully run gRPC on macOS.
 // For instructions on how to configure Kestrel and gRPC clients on macOS, visit https://go.microsoft.com/fwlink/?linkid=2099682
 
+// Configure logging with Serilog
+builder.Services.AddSeriLogger(builder.Configuration);
 // Add services to the container.
 builder.Services.AddGrpc();
 

@@ -1,6 +1,7 @@
 //using Discount.API.Extensions;
 using Discount.API.Repositories;
 using Microsoft.OpenApi.Models;
+using Common.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 //ConfigurationManager configuration = builder.Configuration;
@@ -10,6 +11,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<IDiscountRepository, DiscountRepository>();
 //builder.Services.AddHealthChecks().AddNpgSql(configuration["DatabaseSettings:ConnectionString"]);
 
+// Configure logging with Serilog
+builder.Services.AddSeriLogger(builder.Configuration);
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
