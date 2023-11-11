@@ -42,9 +42,23 @@ namespace OcelotApiGw
             .UseIISIntegration()
             .Configure(app =>
             {
+                // Use routing
+                app.UseRouting();
+
+                app.UseEndpoints(endpoints =>
+                {
+                    endpoints.MapGet("/", async context =>
+                    {
+                        await context.Response.WriteAsync("Welcome to ekart Shopping Site");
+                    });
+                });
+
                 app.UseOcelot().Wait();
+                
+
             })
             .Build()
+
             .Run();
         }
     }

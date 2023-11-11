@@ -6,6 +6,10 @@ using Discount.Grpc.Protos;
 using MassTransit;
 using Microsoft.OpenApi.Models;
 using Common.Logging;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using HealthChecks.UI.Client;
 //using MassTransit.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -33,8 +37,11 @@ builder.Services.AddMassTransit(config =>
     config.UsingRabbitMq((ctx, cfg) =>
     {
         cfg.Host(configuration["EventBusSettings:HostAddress"]);
+        //cfg.UseHealthCheck(ctx);
+       
 
     });
+    config.AddHealthChecks();
 
 });
 
@@ -48,6 +55,9 @@ builder.Services.AddSwaggerGen(c =>
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Basket.API", Version = "v1" });
 });
 
+// Configure Redis health checks
+builder.Services.AddHealthChecks()
+                    .AddRedis(builder.Configuration["CacheSettings:ConnectionString"], "Redis Health", HealthStatus.Degraded);
 
 var app = builder.Build();
 
@@ -57,11 +67,23 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Basket.API v1"));
 }
-
+// Use routing
+app.UseRouting();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
 app.MapControllers();
+
+// Configure health check endpoint for app & MongoDb
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapHealthChecks("/hc", new HealthCheckOptions
+    {
+        Predicate = _ => true, // Include all checks
+        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+    });
+});
+
 
 app.Run();
